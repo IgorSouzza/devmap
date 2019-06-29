@@ -21,26 +21,34 @@ class Main extends Component {
 
   handleLocateUser = () => {
     const { viewport } = this.state;
+    const userCoords = { ...viewport };
 
     navigator.geolocation.getCurrentPosition((position) => {
-      const newstate = { ...viewport };
-      newstate.latitude = position.coords.latitude;
-      newstate.longitude = position.coords.longitude;
+      userCoords.latitude = position.coords.latitude;
+      userCoords.longitude = position.coords.longitude;
       this.setState({
-        viewport: newstate,
-        userLatitude: newstate.latitude,
-        userLongitude: newstate.longitude,
+        viewport: userCoords,
+        userLatitude: userCoords.latitude,
+        userLongitude: userCoords.longitude,
       });
     }, () => {
-      const newstate = { ...viewport };
-      newstate.latitude = 40.730610;
-      newstate.longitude = -73.935242;
+      userCoords.latitude = 40.7;
+      userCoords.longitude = -74;
       this.setState({
-        viewport: newstate,
-        userLatitude: newstate.latitude,
-        userLongitude: newstate.longitude,
+        viewport: userCoords,
+        userLatitude: userCoords.latitude,
+        userLongitude: userCoords.longitude,
       });
     });
+  }
+
+  handleClick = (map) => {
+    const lngLat = {
+      lng: map.lngLat[0],
+      lat: map.lngLat[1],
+    };
+
+    console.log(lngLat.lat);
   }
 
   render() {
@@ -52,6 +60,7 @@ class Main extends Component {
           {...viewport}
           onViewportChange={vp => this.setState({ viewport: vp })}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+          onClick={this.handleClick}
         >
           <GeolocateControl
             positionOptions={{ enableHighAccuracy: true }}
