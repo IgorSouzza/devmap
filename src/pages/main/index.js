@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import ReactMapGL, { Marker, GeolocateControl } from 'react-map-gl';
 
+import AddBox from '../../components/AddBox';
+
 class Main extends Component {
   state = {
     viewport: {
@@ -11,8 +13,10 @@ class Main extends Component {
       longitude: 0,
       zoom: 15,
     },
+    // Propriedades abaixo irá para o redux posteriormente
     userLatitude: 0,
     userLongitude: 0,
+    users: [],
   };
 
   componentDidMount() {
@@ -43,16 +47,21 @@ class Main extends Component {
   }
 
   handleClick = (map) => {
+    const { users } = this.state;
     const lngLat = {
       lng: map.lngLat[0],
       lat: map.lngLat[1],
     };
 
-    console.log(lngLat.lat);
+    this.setState({ users: [...users, lngLat] });
   }
 
   render() {
-    const { viewport, userLatitude, userLongitude } = this.state;
+    const {
+      viewport,
+      userLatitude,
+      userLongitude,
+    } = this.state;
 
     return (
       <>
@@ -74,6 +83,7 @@ class Main extends Component {
           >
             <div>You are here</div>
           </Marker>
+          <AddBox />
         </ReactMapGL>
       </>
     );
