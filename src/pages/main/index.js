@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import ReactMapGL, { Marker, GeolocateControl } from 'react-map-gl';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as UserActions } from '../../store/ducks/users';
 
 import AddBox from '../../components/AddBox';
 
@@ -13,11 +17,26 @@ class Main extends Component {
       longitude: 0,
       zoom: 15,
     },
-    // Propriedades abaixo irá para o redux posteriormente
-    userLatitude: 0,
-    userLongitude: 0,
-    users: [],
+    initialLatitude: 0,
+    initialLongitude: 0,
+    clickLngLat: {},
   };
+
+  static propTypes = {
+    addUserToggleModal: PropTypes.func.isRequired,
+    users: PropTypes.shape({
+      error: PropTypes.string,
+      loading: PropTypes.bool,
+      modalVisible: PropTypes.bool,
+      data: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        location: PropTypes.shape({
+          lat: PropTypes.number,
+          lng: PropTypes.number,
+        }),
+      })),
+    }).isRequired,
+  }
 
   componentDidMount() {
     this.handleLocateUser();
@@ -32,36 +51,38 @@ class Main extends Component {
       userCoords.longitude = position.coords.longitude;
       this.setState({
         viewport: userCoords,
-        userLatitude: userCoords.latitude,
-        userLongitude: userCoords.longitude,
+        initialLatitude: userCoords.latitude,
+        initialLongitude: userCoords.longitude,
       });
     }, () => {
       userCoords.latitude = 40.7;
       userCoords.longitude = -74;
       this.setState({
         viewport: userCoords,
-        userLatitude: userCoords.latitude,
-        userLongitude: userCoords.longitude,
+        initialLatitude: userCoords.latitude,
+        initialLongitude: userCoords.longitude,
       });
     });
   }
 
   handleClick = (map) => {
-    const { users } = this.state;
+    const { addUserToggleModal } = this.props;
     const lngLat = {
       lng: map.lngLat[0],
       lat: map.lngLat[1],
     };
-
-    this.setState({ users: [...users, lngLat] });
+    this.setState({ clickLngLat: lngLat });
+    addUserToggleModal(true);
   }
 
   render() {
     const {
       viewport,
-      userLatitude,
-      userLongitude,
+      initialLatitude,
+      initialLongitude,
+      clickLngLat,
     } = this.state;
+    const { users } = this.props;
 
     return (
       <>
@@ -69,6 +90,7 @@ class Main extends Component {
           {...viewport}
           onViewportChange={vp => this.setState({ viewport: vp })}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+          mapStyle="mapbox://styles/mapbox/streets-v9?optimize=true"
           onClick={this.handleClick}
         >
           <GeolocateControl
@@ -76,18 +98,24 @@ class Main extends Component {
             trackUserLocation
           />
           <Marker
-            latitude={userLatitude}
-            longitude={userLongitude}
+            latitude={initialLatitude}
+            longitude={initialLongitude}
             offsetLeft={-20}
             offsetTop={-10}
           >
             <div>You are here</div>
           </Marker>
-          <AddBox />
+          {users.modalVisible && <AddBox location={clickLngLat} />}
         </ReactMapGL>
       </>
     );
   }
 }
 
-export default Main;
+const mapStateToProps = state => ({
+  users: state.users,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(UserActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
