@@ -14,6 +14,7 @@ class AddBox extends Component {
 
   static propTypes = {
     addUserRequest: PropTypes.func.isRequired,
+    addUserToggleModal: PropTypes.func.isRequired,
     location: PropTypes.shape({
       lat: PropTypes.number,
       lng: PropTypes.number,
@@ -28,15 +29,24 @@ class AddBox extends Component {
     addUserRequest(inputValue, location);
   }
 
+  handleCancelForm = (e) => {
+    e.preventDefault();
+    const { addUserToggleModal } = this.props;
+    addUserToggleModal(false);
+  }
+
   render() {
     return (
       <Form onSubmit={this.handleAddUser}>
         <input
           type="text"
           placeholder="Insira o nome de usuário aqui..."
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus
           onChange={e => this.setState({ inputValue: e.target.value })}
         />
         <button type="submit">OK!</button>
+        <button type="button" onClick={this.handleCancelForm}>Cancelar</button>
       </Form>
     );
   }

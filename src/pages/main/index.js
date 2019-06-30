@@ -7,6 +7,9 @@ import { bindActionCreators } from 'redux';
 import { Creators as UserActions } from '../../store/ducks/users';
 
 import AddBox from '../../components/AddBox';
+import Sidebar from '../../components/Sidebar';
+
+import { Container, UserAvatar } from './styles';
 
 class Main extends Component {
   state = {
@@ -15,10 +18,8 @@ class Main extends Component {
       height: '97vh',
       latitude: 0,
       longitude: 0,
-      zoom: 15,
+      zoom: 13.4,
     },
-    initialLatitude: 0,
-    initialLongitude: 0,
     clickLngLat: {},
   };
 
@@ -51,16 +52,12 @@ class Main extends Component {
       userCoords.longitude = position.coords.longitude;
       this.setState({
         viewport: userCoords,
-        initialLatitude: userCoords.latitude,
-        initialLongitude: userCoords.longitude,
       });
     }, () => {
       userCoords.latitude = 40.7;
       userCoords.longitude = -74;
       this.setState({
         viewport: userCoords,
-        initialLatitude: userCoords.latitude,
-        initialLongitude: userCoords.longitude,
       });
     });
   }
@@ -78,8 +75,6 @@ class Main extends Component {
   render() {
     const {
       viewport,
-      initialLatitude,
-      initialLongitude,
       clickLngLat,
     } = this.state;
     const { users } = this.props;
@@ -97,16 +92,22 @@ class Main extends Component {
             positionOptions={{ enableHighAccuracy: true }}
             trackUserLocation
           />
-          <Marker
-            latitude={initialLatitude}
-            longitude={initialLongitude}
-            offsetLeft={-20}
-            offsetTop={-10}
-          >
-            <div>You are here</div>
-          </Marker>
-          {users.modalVisible && <AddBox location={clickLngLat} />}
+          {users.data.map(user => (
+            <Marker
+              key={user.id}
+              latitude={user.location.lat}
+              longitude={user.location.lng}
+              offsetLeft={-20}
+              offsetTop={-10}
+            >
+              <UserAvatar src={user.avatar} alt={user.login} />
+            </Marker>
+          ))}
         </ReactMapGL>
+        <Container>
+          <Sidebar />
+          {users.modalVisible && <AddBox location={clickLngLat} />}
+        </Container>
       </>
     );
   }

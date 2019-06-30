@@ -15,6 +15,9 @@ export function* addUser(action) {
     } else {
       const userData = {
         id: data.id,
+        name: data.name,
+        login: data.login,
+        avatar: data.avatar_url,
         location: action.payload.userLocation,
       };
       yield put(UserActions.addUserSuccess(userData));

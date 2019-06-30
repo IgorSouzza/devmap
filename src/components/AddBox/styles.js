@@ -4,5 +4,7 @@ export const Form = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  width: 70vw;
+  height: 90vh;
+  z-index: 100;
 `;
