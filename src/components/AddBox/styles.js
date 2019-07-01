@@ -5,7 +5,7 @@ export const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 74vw;
+  width: 64vw;
   height: 90vh;
   z-index: 100;
   section {
