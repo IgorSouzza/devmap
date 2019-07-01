@@ -73,10 +73,7 @@ class Main extends Component {
   }
 
   render() {
-    const {
-      viewport,
-      clickLngLat,
-    } = this.state;
+    const { viewport, clickLngLat } = this.state;
     const { users } = this.props;
 
     return (

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Creators as UserActions } from '../../store/ducks/users';
 
-import { Form } from './styles';
+import { Form, Overlay } from './styles';
 
 class AddBox extends Component {
   state = {
@@ -38,15 +38,21 @@ class AddBox extends Component {
   render() {
     return (
       <Form onSubmit={this.handleAddUser}>
-        <input
-          type="text"
-          placeholder="Insira o nome de usuário aqui..."
-          // eslint-disable-next-line jsx-a11y/no-autofocus
-          autoFocus
-          onChange={e => this.setState({ inputValue: e.target.value })}
-        />
-        <button type="submit">OK!</button>
-        <button type="button" onClick={this.handleCancelForm}>Cancelar</button>
+        <Overlay />
+        <section>
+          <h1>Adicionar novo usuário</h1>
+          <input
+            type="text"
+            placeholder="Usuário no Github..."
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+            onChange={e => this.setState({ inputValue: e.target.value })}
+          />
+          <div>
+            <button type="button" onClick={this.handleCancelForm}>Cancelar</button>
+            <button type="submit">OK!</button>
+          </div>
+        </section>
       </Form>
     );
   }

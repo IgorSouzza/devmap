@@ -8,8 +8,8 @@ export const Container = styled.div`
 `;
 
 export const UserAvatar = styled.img`
-  border: 2px solid aquamarine;
+  border: 2px solid #7159c1;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 `;
