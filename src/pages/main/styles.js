@@ -6,6 +6,9 @@ export const Container = styled.div`
   top: 40px;
   left: 10px;
   overflow: visible;
+  @media (max-width: 768px) {
+    left: 0px;
+  }
 `;
 
 export const UserAvatar = styled.img`

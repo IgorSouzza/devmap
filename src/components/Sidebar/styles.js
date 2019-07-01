@@ -13,6 +13,9 @@ export const Container = styled.div`
   position: relative;
   overflow-y: scroll;
   cursor: default;
+  @media (max-width: 768px) {
+    display: none;
+  }
   section {
     border-bottom: 1px solid #e8e8e8;
     display: flex;

@@ -8,6 +8,9 @@ export const Form = styled.form`
   width: 64vw;
   height: 90vh;
   z-index: 100;
+  @media (max-width: 768px) {
+    width: 100vw;
+  }
   section {
     background-color: #FFF;
     border-radius: 5px;
