@@ -27,11 +27,12 @@ export function* addUser(action) {
         location: action.payload.userLocation,
       };
       yield put(UserActions.addUserSuccess(userData));
-      yield put(UserActions.addUserToggleModal(false));
       toast('Usuário adicionado com sucesso');
     }
   } catch (err) {
     yield put(UserActions.addUserFailure('Erro ao adicionar usuário'));
     toast.error('Erro ao adicionar usuário');
+  } finally {
+    yield put(UserActions.addUserToggleModal(false));
   }
 }
