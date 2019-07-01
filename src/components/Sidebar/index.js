@@ -8,11 +8,16 @@ import { Container } from './styles';
 const Sidebar = ({ users }) => (
   <Container>
     {users.data.map(user => (
-      <div key={user.id}>
-        <p>{user.name}</p>
-        <p>{user.login}</p>
-        <hr />
-      </div>
+      <section key={user.id}>
+        <div>
+          <img src={user.avatar} alt={user.name} />
+          <p>
+            {user.name ? user.name : 'User'} <br />
+            <span>{user.login}</span>
+          </p>
+        </div>
+        <button type="button">X</button>
+      </section>
     ))}
   </Container>
 );

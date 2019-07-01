@@ -5,6 +5,7 @@ export const Container = styled.div`
   position: absolute;
   top: 40px;
   left: 10px;
+  overflow: visible;
 `;
 
 export const UserAvatar = styled.img`
